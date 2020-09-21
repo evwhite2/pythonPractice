@@ -1,8 +1,9 @@
+import csv 
 from csv import reader
 
 # transforming/reading data fro csv
-
-opened_file= open('AppleStore.csv')
+# CONFIGURATIONS FOR PYTHON 3 MUST BE SHUT OFF TO RUN THIS CODE
+opened_file= open('workingImport/AppleStore.csv')
 read_file = reader(opened_file)
 apps_data=list(read_file)
 
