@@ -10,3 +10,4 @@ input_3 = input()
 x = max(int(input_1), int(input_2), int(input_3))
 
 print("\nMAX: "+str(x))
+

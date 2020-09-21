@@ -19,3 +19,5 @@ print(randomlyInRange)
 makeString = str(randomFloat)
 print("Look I can concatinate this now..."+makeString)
 print(type(makeString))
+
+print(newList[::4]) # print first in list, then every fourth element
