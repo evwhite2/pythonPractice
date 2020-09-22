@@ -6,3 +6,4 @@ def sumMultiplesOf3and5(x):
     print(sum)
 
 sumMultiplesOf3and5(10000)
+

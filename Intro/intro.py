@@ -16,3 +16,4 @@ total= app_data_set[0][-1] + app_data_set[1][-1]+ app_data_set[2][-1]+ app_data_
 avg_rating=total/5
 print(avg_rating)
 
+
