@@ -1,3 +1,5 @@
+import re
+
 vowels = ["a", "e", "i", "o", "u"]
 
 def vowel_locale(letter):
@@ -22,3 +24,25 @@ def encrypt_piglatin(plaintext):
     feedback="\n"+plaintext+" => "+result
     return [result, feedback]
 
+def encrypt_caesar(plaintext, shift):
+    txt=list(plaintext.upper().strip())   
+    shifted=[]
+    for c in txt:
+        alpha= re.match('^[A-Z]+$', c)
+        if alpha:
+            asci = ord(c)+shift
+            shifted.append(str(asci))
+        else:
+            shifted.append(str(c))
+    cipher= "".join(shifted)
+    print("\n"+cipher)
+    return cipher
+
+# def decrypt_caesar(ciphertext, shift):
+#     txt=list(ciphertext.strip())
+#     decrypted=[]
+    
+#still working on this....
+
+# encrypt_caesar("abcdefg$", 1)
+# decrypt_caesar("66676869707172$", 1)
