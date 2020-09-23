@@ -59,3 +59,51 @@ def decrypt_caesar(ciphertext, shift):
     deciphered="".join(decrypted)
     feedback="\n decrypted:  "+deciphered
     return [deciphered, feedback]
+
+def encrypt_vigenere(plaintext, keyword):
+    protxt=list(plaintext.strip().upper())
+    keytxt=list(keyword.strip().upper())
+    wrapDif=len(protxt)-len(keytxt)
+    keyshift=[]
+    encrypted=[]
+    movement=[]
+    if wrapDif != 0:
+        if wrapDif <=-1:
+            keytxt=keytxt[:len(protxt)]
+        else:
+            repeater=0
+            while wrapDif >=1:
+                if repeater>=len(keytxt):
+                    repeater=0
+                keytxt.append(keytxt[repeater])
+                repeater+=1
+                wrapDif-=1
+    for c in keytxt:
+        asciKey = ord(c)
+        keyshift.append(asciKey)
+    for (i, c) in enumerate(protxt):
+        asciPro = ord(c)-keyshift[i]+64
+        print(asciPro)
+        # diff = asciPro-keyshift[i]
+        # print(diff)
+        # print(keyshift[i])
+        movement.append(asciPro)
+        encrypted.append(chr(asciPro))
+    print(keytxt) 
+    print(keyshift)
+    print(movement)
+    print(encrypted)
+    print('\n')
+    
+#STUCK on this problem
+
+
+# encrypt_vigenere("hello muffin", "kittybobittyfeefifofitty")
+# encrypt_vigenere("hello muffin", "kit")
+# encrypt_vigenere("hello", "kiten")
+
+legend=list()
+for c in range(65, 91):
+    legend.append(chr(c))
+
+# print(legend)
