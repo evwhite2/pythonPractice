@@ -35,14 +35,27 @@ def encrypt_caesar(plaintext, shift):
         else:
             shifted.append(str(c))
     cipher= "".join(shifted)
-    print("\n"+cipher)
-    return cipher
+    feedback="\n cipher:  "+cipher
+    return [cipher, feedback]
 
-# def decrypt_caesar(ciphertext, shift):
-#     txt=list(ciphertext.strip())
-#     decrypted=[]
-    
-#still working on this....
-
-# encrypt_caesar("abcdefg$", 1)
-# decrypt_caesar("66676869707172$", 1)
+def decrypt_caesar(ciphertext, shift):
+    txt=list(ciphertext.strip())
+    decrypted=[]
+    nonNum=dict()
+    offset=0
+    for (i, c) in enumerate(txt):
+        numeric= re.search('^[0-9]+$', c)
+        if numeric:
+            next
+        else:
+            nonNum.__setitem__(int((i/2)+offset), c, )
+            txt.remove(c)
+            offset+=1
+    for i in range(0, len(txt), 2):
+        s=chr(int(str(txt[i]+txt[i+1]))-shift)
+        decrypted.append(s)
+    for key in nonNum:
+        decrypted.insert(key, nonNum[key])
+    deciphered="".join(decrypted)
+    feedback="\n decrypted:  "+deciphered
+    return [deciphered, feedback]
