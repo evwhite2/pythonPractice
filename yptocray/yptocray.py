@@ -1,6 +1,6 @@
 import re
 
-specials = [" ","!", "@", "#", "$", "%", "^","&", "*", "-", "_", "=", "+"]
+specials = [" ","!", "@", "#", "$", "%", "^","&", "*", "-", "_", "=", "+", "?"]
 vowels = ["a", "e", "i", "o", "u"]
 legend=list()
 invalidString="ERROR: Invalid characters used. Only alphaNumeric text or '!@#$%^&*-_+='"
@@ -79,7 +79,6 @@ def decrypt_caesar(ciphertext, shift):
     feedback="\n decrypted:  "+deciphered
     return [deciphered, feedback]
 
-#STUCK on this problem
 def encrypt_vigenere(plaintext, keyword):
     protxt=list(plaintext.strip().upper())
     keytxt=list(keyword.strip().upper())
@@ -87,17 +86,7 @@ def encrypt_vigenere(plaintext, keyword):
     keyshift=[]
     encrypted=[]
     cipher=[]
-    if wrapDif != 0:
-        if wrapDif <=-1:
-            keytxt=keytxt[:len(protxt)]
-        else:
-            repeater=0
-            while wrapDif >=1:
-                if repeater>=len(keytxt):
-                    repeater=0
-                keytxt.append(keytxt[repeater])
-                repeater+=1
-                wrapDif-=1
+    text_wrapper(protxt, keytxt)
     for c in keytxt:
         keyshift.append(legend.index(c))
     for (i, c) in enumerate(protxt):
@@ -114,3 +103,38 @@ def encrypt_vigenere(plaintext, keyword):
     print(feedback)
     return [cipher, feedback]
 
+def decrypt_vigenere(cipher, keyword):
+    protxt=list(cipher.strip().upper())
+    keytxt=list(keyword.strip().upper())
+    keyshift=[]
+    decrypted=[]
+    message=[]
+    text_wrapper(protxt, keytxt)
+    for c in keytxt:
+        keyshift.append(legend.index(c))
+    for (i, c) in enumerate(protxt):
+        shift= legend.index(c)-keyshift[i]
+        if shift<0:
+            newshift=len(legend)+shift
+            decrypted.append(newshift)
+        else:
+            decrypted.append(shift)
+    for n in decrypted:
+        message.append(legend[n])
+    message = "".join(message).lower()
+    feedback = "\n => "+message
+    return [message, feedback]
+
+def text_wrapper(phraseArray, keywordArray):
+    difference=len(phraseArray)-len(keywordArray)
+    if difference <=-1:
+        keywordArray=keywordArray[:len(phraseArray)]
+    else:
+        repeater=0
+        while difference >=1:
+            if repeater>=len(keywordArray):
+                repeater=0
+            keywordArray.append(keywordArray[repeater])
+            repeater+=1
+            difference-=1   
+    return phraseArray, keywordArray
