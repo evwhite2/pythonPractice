@@ -1,7 +1,26 @@
 import re
 
+specials = [" ","!", "@", "#", "$", "%", "^","&", "*", "-", "_", "=", "+"]
 vowels = ["a", "e", "i", "o", "u"]
+legend=list()
+invalidString="ERROR: Invalid characters used. Only alphaNumeric text or '!@#$%^&*-_+='"
 
+def create_legend_list():
+    for c in range(65, 91):
+        legend.append(chr(c))
+    for c in range(48,58):
+        legend.append(chr(c))
+    for c in specials:
+        legend.append(c)
+
+create_legend_list()
+
+def legend_validation(letter):
+    if letter in legend:
+        return 1
+    else:
+        return 0
+    
 def vowel_locale(letter):
     if letter in vowels:
         return 1
@@ -60,13 +79,14 @@ def decrypt_caesar(ciphertext, shift):
     feedback="\n decrypted:  "+deciphered
     return [deciphered, feedback]
 
+#STUCK on this problem
 def encrypt_vigenere(plaintext, keyword):
     protxt=list(plaintext.strip().upper())
     keytxt=list(keyword.strip().upper())
     wrapDif=len(protxt)-len(keytxt)
     keyshift=[]
     encrypted=[]
-    movement=[]
+    cipher=[]
     if wrapDif != 0:
         if wrapDif <=-1:
             keytxt=keytxt[:len(protxt)]
@@ -79,31 +99,18 @@ def encrypt_vigenere(plaintext, keyword):
                 repeater+=1
                 wrapDif-=1
     for c in keytxt:
-        asciKey = ord(c)
-        keyshift.append(asciKey)
+        keyshift.append(legend.index(c))
     for (i, c) in enumerate(protxt):
-        asciPro = ord(c)-keyshift[i]+64
-        print(asciPro)
-        # diff = asciPro-keyshift[i]
-        # print(diff)
-        # print(keyshift[i])
-        movement.append(asciPro)
-        encrypted.append(chr(asciPro))
-    print(keytxt) 
-    print(keyshift)
-    print(movement)
-    print(encrypted)
-    print('\n')
-    
-#STUCK on this problem
+        shift = legend.index(c)+keyshift[i]
+        if shift > len(legend):
+            newshift = shift-len(legend)
+            encrypted.append(newshift)
+        else:
+            encrypted.append(int(shift))
+    for n in encrypted:
+        cipher.append(legend[n])
+    cipher = "".join(cipher)
+    feedback="\n Cipher: "+cipher
+    print(feedback)
+    return [cipher, feedback]
 
-
-# encrypt_vigenere("hello muffin", "kittybobittyfeefifofitty")
-# encrypt_vigenere("hello muffin", "kit")
-# encrypt_vigenere("hello", "kiten")
-
-legend=list()
-for c in range(65, 91):
-    legend.append(chr(c))
-
-# print(legend)
