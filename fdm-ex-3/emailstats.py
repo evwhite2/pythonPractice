@@ -2,10 +2,13 @@ import statistics
 import os
 from os import path
 __dirName='C:/Users/evwhi/PythonCamp/fdm-ex-3/emails/'
+__projNam='C:/Users/evwhi/PythonCamp/fdm-ex-3/'
 
-def getStats(total, wordCount, avgWordCount, standardDeviation, totalBytes):
-    stats="\nTotal emails: "+str(total)+"\n"+"Word count:  "+str(wordCount)+"\n"+"Avg word count:  "+str(avgWordCount)+"\n"+"Standard deviation  "+str(standardDeviation)+"\n"+"Bytes:   "+str(totalBytes)
-    print(stats)
+def writeStats(total, wordCount, avgWordCount, standardDeviation, totalBytes):
+    stats="\nTotal emails:\n"+str(total)+"\n"+"Total word count:\n"+str(wordCount)+"\n"+"Avgerage word count per email:\n"+str(avgWordCount)+"\n"+"Standard deviation of word count:\n"+str(standardDeviation)+"\n"+"Total bytes:\n"+str(totalBytes)
+    statFile= open(os.path.join(__projNam, 'emails_info.txt'), 'w')
+    statFile.write(stats)
+    statFile.close()
 
 def openAll():
     total=0
@@ -31,11 +34,11 @@ def openAll():
                 print("ERROR at file: "+error_file_name+"___at position: "+error_local)
             finally:
                 files_data.append(wordCount)
-    print("\n.....getting stats")
+    print("\nWriting to email_info.txt...")
     standardDeviation=round(statistics.stdev(files_data), 2)
     wordCount=(sum(files_data, 0))
     avgWordCount=round(wordCount/total, 2)
-    getStats(total, wordCount, avgWordCount, standardDeviation, totalBytes)
+    writeStats(total, wordCount, avgWordCount, standardDeviation, totalBytes)
 
 def byteCounter(line):
     count=0
