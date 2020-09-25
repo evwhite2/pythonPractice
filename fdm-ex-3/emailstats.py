@@ -2,6 +2,10 @@ import os
 from os import path
 __dirName='C:/Users/evwhi/PythonCamp/fdm-ex-3/emails/'
 
+def getStats(total, wordCount, avgWordCount, standardDeviation, totalBytes):
+    stats="\nTotal emails: "+str(total)+"\n"+"Word count:  "+str(wordCount)+"\n"+"Avg word count:  "+str(avgWordCount)+"\n"+"Standard deviation  "+str(standardDeviation)+"\n"+"Bytes:   "+str(totalBytes)
+    print(stats)
+
 def openAll():
     total=0
     wordCount=0
@@ -10,30 +14,29 @@ def openAll():
     totalBytes=0
     files_data=[]
     for file in os.listdir(__dirName):
-        if file.endswith('.txt'):   
-            total+=1
-            file_content= []
-            with open(os.path.join(__dirName, file)) as f:
+        total+=1
+        with open(os.path.join(__dirName, file, ), encoding="utf8") as f:
+            try:
                 for line in f:
-                    # print(line)
-                    file_content.append({line})
-            files_data.append(file_content)
-            f.close()
-        else:
-            continue
-    print(files_data)
-    # getStats(total, wordCount, avgWordCount, standardDeviation, totalBytes)
+                    line_data=line.split(" ")
+                    counter = wordCounter(line_data)
+                    wordCount+=counter
+            except:
+                error_file_name= f.name
+                print("ERROR at file: "+error_file_name)
+            finally:
+                continue
+    print("\n.....getting stats")
+    getStats(total, wordCount, avgWordCount, standardDeviation, totalBytes)
 
-def getStats(total, wordCount, avgWordCount, standardDeviation, totalBytes):
-    # stats = dict({
-    # "Total emails": total,
-    # "Word count": wordCount,
-    # "Avg word count": avgWordCount,
-    # "Standard deviation":standardDeviation,
-    # "Bytes": totalBytes
-    # })
-    stats="\nTotal emails: "+str(total)+"\n"+"Word count:  "+str(wordCount)+"\n"+"Avg word count:  "+str(avgWordCount)+"\n"+"Standard deviation  "+str(standardDeviation)+"\n"+"Bytes:   "+str(totalBytes)
-    print(stats)
+def wordCounter(line):
+    count=0
+    for word in line:
+        if word=="\n":
+            continue
+        else:
+            count+=1
+    return count
 
 openAll()
 
