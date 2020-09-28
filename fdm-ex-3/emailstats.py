@@ -1,7 +1,6 @@
 import statistics
 import re
 import os
-import operator
 from os import path
 __dirName='C:/Users/evwhi/PythonCamp/fdm-ex-3/emails/'
 __projNam='C:/Users/evwhi/PythonCamp/fdm-ex-3/'
