@@ -1,22 +1,37 @@
 import re
 __dirName = 'C:/Users/evwhi/PythonCamp/fdm-ex-3/'
 
-static_count=0
+static_count=1
+
+def findMissing(stream_data, main_data):
+    stream_data_stripped= stripId(stream_data)
+    main_data_stripped = stripId(main_data)
+    while len(stream_data_stripped)>0:
+        batch = stream_data_stripped[:10]
+        print(batch) # BROKEN, WORKING ON THIS
+        for (idx, data) in batch:
+            if data != main_data_stripped[idx]:
+                    print("ERROR: \n STREAM: "+str(data)+"\n MAIN"+ main_data_stripped[idx]+'\n')
+                    print("NEXT LINE IN STREAM: \n"+stream_data_stripped[idx+1])
+                    print("NEXT LINE IN MAIN: \n"+main_data_stripped[idx+1])
+            else: continue
+        stream_data_stripped= stream_data_stripped[10:]
 
 def findNegatives(stream_data, main_data):
     found_errors_array= []
-    while len(stream_data) > 0:
-        batch = stream_data[:10]
+    stream_data_in=stream_data
+    while len(stream_data_in) > 0:
+        batch = stream_data_in[:10]
         for record in batch:
             for data in record:
                 if data==str(-1):
                     found_errors_array.append(record)
                 else: continue
-        stream_data= stream_data[10:]
+        stream_data_in= stream_data_in[10:]
     addToCsv(found_errors_array)
+    findMissing(stream_data, main_data)
 
 def findErrors(stream_data_file, main_data_file):
-    # found_errors=dict()
     stream_data= []
     main_data= []
     stream_data_file = open(__dirName+stream_data_file, 'r', encoding='utf8')
@@ -51,6 +66,10 @@ def sumErrors(list):
         return 1
     else:
         return 0
+
+def stripId(array):
+    array= array[1:]
+    return array
 
 def addToCsv(data_array):
     file = open(__dirName+'daily_errors.csv', 'a', encoding='utf8') 
