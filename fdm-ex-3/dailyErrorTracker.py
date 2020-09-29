@@ -1,20 +1,19 @@
 import re
 __dirName = 'C:/Users/evwhi/PythonCamp/fdm-ex-3/'
 
+static_count=0
 
 def findNegatives(stream_data, main_data):
-    found_errors=""
     found_errors_array= []
     while len(stream_data) > 0:
         batch = stream_data[:10]
         for record in batch:
             for data in record:
                 if data==str(-1):
-                    found_errors=found_errors+"\n"+str(record)
                     found_errors_array.append(record)
                 else: continue
         stream_data= stream_data[10:]
-    addToCsv(found_errors, found_errors_array)
+    addToCsv(found_errors_array)
 
 def findErrors(stream_data_file, main_data_file):
     # found_errors=dict()
@@ -53,9 +52,9 @@ def sumErrors(list):
     else:
         return 0
 
-def addToCsv(data_string, data_array):
+def addToCsv(data_array):
     file = open(__dirName+'daily_errors.csv', 'a', encoding='utf8') 
-    count=1
+    count=static_count
     for record in data_array:
         stringify = str(count)
         for data in record:
@@ -63,21 +62,7 @@ def addToCsv(data_string, data_array):
         stringify=stringify+'\n'
         file.write(stringify)
         count+=1
+    file.close()
     
 
 findErrors('daily_trades.csv', 'daily_trades_master.csv')
-
-# field_string = "index"
-#     for field in fields:
-#         field_string=field_string+","+field
-#     field_string=field_string+"\n"
-#     csvFile = open(__dirName+csvFile_string, 'w+', encoding='utf-8') 
-#     csvFile.write(field_string)
-#     record_string=""
-#     for key, value in records.items():
-#         view = str(key)
-#         for i in value:
-#             view = view+","+i
-#         record_string=record_string+view+"\n"
-#         csvFile.writelines(view+"\n")
-#     csvFile.close()
