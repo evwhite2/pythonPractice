@@ -1,38 +1,28 @@
 import re
 __dirName = 'C:/Users/evwhi/PythonCamp/fdm-ex-3/'
 
-static_count=1
-
 def findMissing(stream_data, main_data):
-    stream_data_stripped= stripId(stream_data)
-    main_data_stripped = stripId(main_data)
-    main_idx=0
-    while len(stream_data_stripped)>500:
-        batch = stream_data_stripped[:1][0]
-        main_batch = main_data_stripped[main_idx]
-        if str(batch) == str(main_batch):
+    missing_ids=[]
+    missing_records=[]
+    stream_data_only= stream_data[1:]
+    main_data_only= main_data[1:]
+    for (idx, record) in enumerate(stream_data_only):
+        end = idx+1
+        if end>=len(stream_data_only):
             exit
         else:
-            print("ERROR at "+str(main_idx))
-            flagged_idx=[]
-            for idx, data in enumerate(batch):
-                if data==main_batch[idx]:
-                    flagged_idx.append(0)
-                else:
-                    flagged_idx.append(1)
-            if sum(flagged_idx)>1:
-                print('SUM: '+ str(sum(flagged_idx)))
-                print("STREAM SHOWS: \n"+str(batch))
-                print("MAIN SHOWS: \n"+ str(main_batch))
-                print("MAIN OPTIONS: \n"+str(main_data_stripped[main_idx+1])+"\n"+str(main_data_stripped[main_idx+2])+"\n\n")
-            else:
-                exit
-        if main_idx==len(main_data_stripped)-1:
-            print("STOPPED MAIN")
-            exit
-        else:
-            main_idx+=1
-        stream_data_stripped= stream_data_stripped[1:]
+            step = int(stream_data_only[idx+1][0])-int(record[0])
+            if step > 1:
+                missing_ids.append(int(record[0])+1)
+    for (idx, record) in enumerate(main_data_only):
+        try:
+            for id in missing_ids:
+                if record[0]== str(id):
+                    missing_records.append(record)
+        except:
+            continue
+    addToCsv(missing_records)
+
 
 def findNegatives(stream_data, main_data):
     found_errors_array= []
@@ -48,7 +38,7 @@ def findNegatives(stream_data, main_data):
     addToCsv(found_errors_array)
     findMissing(stream_data, main_data)
 
-def findErrors(stream_data_file, main_data_file):
+def collectData(stream_data_file, main_data_file):
     stream_data= []
     main_data= []
     stream_data_file = open(__dirName+stream_data_file, 'r', encoding='utf8')
@@ -61,7 +51,7 @@ def findErrors(stream_data_file, main_data_file):
         main_data.append(line)
     stream_data_file.close()
     main_data_file.close()
-    field_names="index"
+    field_names=""
     for field in main_data[0]:
         field_names= field_names+","+field 
     field_names=field_names+"\n"
@@ -77,28 +67,15 @@ def streamLines(line):
     list_stream[-1] = last
     return list_stream
 
-def sumErrors(list):
-    total = sum(list)
-    if total > 0:
-        return 1
-    else:
-        return 0
-
-def stripId(array):
-    array= array[1:]
-    return array
-
 def addToCsv(data_array):
     file = open(__dirName+'daily_errors.csv', 'a', encoding='utf8') 
-    count=static_count
     for record in data_array:
-        stringify = str(count)
+        stringify = ""
         for data in record:
             stringify=stringify+","+data    
         stringify=stringify+'\n'
         file.write(stringify)
-        count+=1
     file.close()
     
 
-findErrors('daily_trades.csv', 'daily_trades_master.csv')
+collectData('daily_trades.csv', 'daily_trades_master.csv')
