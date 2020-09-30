@@ -6,16 +6,26 @@ static_count=1
 def findMissing(stream_data, main_data):
     stream_data_stripped= stripId(stream_data)
     main_data_stripped = stripId(main_data)
+    # main_max = len(main_data_stripped)-1
+    main_idx=0
     while len(stream_data_stripped)>0:
-        batch = stream_data_stripped[:10]
-        print(batch) # BROKEN, WORKING ON THIS
-        for (idx, data) in batch:
-            if data != main_data_stripped[idx]:
-                    print("ERROR: \n STREAM: "+str(data)+"\n MAIN"+ main_data_stripped[idx]+'\n')
-                    print("NEXT LINE IN STREAM: \n"+stream_data_stripped[idx+1])
-                    print("NEXT LINE IN MAIN: \n"+main_data_stripped[idx+1])
-            else: continue
-        stream_data_stripped= stream_data_stripped[10:]
+        batch = stream_data_stripped[:1][0]
+        main_batch = main_data_stripped[main_idx]
+        # print(batch)
+        if str(batch) == str(main_batch):
+            continue
+        else:
+            print("ERROR at "+str(main_idx))
+            print("STREAM SHOWS: \n"+str(batch))
+            print("MAIN SHOWS: \n"+ str(main_batch))
+            print("\n")
+            # print("MAIN OPTIONS: \n"+str(main_data_stripped[main_idx+1])+"\n"+str(main_data_stripped[main_idx+2])+"\n\n")
+        if main_idx==len(main_data_stripped)-1:
+            print("STOPPED MAIN")
+            exit
+        else:
+            main_idx+=1
+        stream_data_stripped= stream_data_stripped[1:]
 
 def findNegatives(stream_data, main_data):
     found_errors_array= []
