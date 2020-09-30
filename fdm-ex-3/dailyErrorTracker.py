@@ -1,41 +1,52 @@
 import re
 __dirName = 'C:/Users/evwhi/PythonCamp/fdm-ex-3/'
 
+def findJulianErrors(stream_data, main_data):
+    deminishing_stream= stream_data
+    while len(deminishing_stream)>0:
+        batch = deminishing_stream[:10]        
+        for record in batch:
+            julian_main = float(record[3])
+            for data in main_data:
+                julian_stream = float(data[3])
+                if julian_main != deminishing_stream:
+                    print("MAIN: "+record[3])
+                    print("STREAM: "+data[3])
+        deminishing_stream=deminishing_stream[10:]
+
 def findMissing(stream_data, main_data):
     missing_ids=[]
     missing_records=[]
-    stream_data_only= stream_data[1:]
-    main_data_only= main_data[1:]
-    for (idx, record) in enumerate(stream_data_only):
+    for (idx, record) in enumerate(stream_data):
         end = idx+1
-        if end>=len(stream_data_only):
+        if end>=len(stream_data):
             exit
         else:
-            step = int(stream_data_only[idx+1][0])-int(record[0])
+            step = int(stream_data[idx+1][0])-int(record[0])
             if step > 1:
                 missing_ids.append(int(record[0])+1)
-    for (idx, record) in enumerate(main_data_only):
+    for (idx, record) in enumerate(main_data):
         try:
             for id in missing_ids:
                 if record[0]== str(id):
                     missing_records.append(record)
         except:
             continue
-    addToCsv(missing_records)
-
+    addToCsv(missing_records, "Missing from stream")
+    findJulianErrors(stream_data, main_data)
 
 def findNegatives(stream_data, main_data):
     found_errors_array= []
-    stream_data_in=stream_data
-    while len(stream_data_in) > 0:
-        batch = stream_data_in[:10]
+    deminishing_stream = stream_data
+    while len(deminishing_stream) > 0:
+        batch = deminishing_stream[:10]
         for record in batch:
             for data in record:
                 if data==str(-1):
                     found_errors_array.append(record)
                 else: continue
-        stream_data_in= stream_data_in[10:]
-    addToCsv(found_errors_array)
+        deminishing_stream= deminishing_stream[10:]
+    addToCsv(found_errors_array, "-1 Error")
     findMissing(stream_data, main_data)
 
 def collectData(stream_data_file, main_data_file):
@@ -54,10 +65,12 @@ def collectData(stream_data_file, main_data_file):
     field_names=""
     for field in main_data[0]:
         field_names= field_names+","+field 
-    field_names=field_names+"\n"
+    field_names=field_names+",error_note\n"
     file = open(__dirName+'daily_errors.csv', 'w', encoding='utf8')
     file.write(field_names)
     file.close()
+    main_data= main_data[1:]
+    stream_data= stream_data[1:]
     findNegatives(stream_data, main_data)
 
 def streamLines(line):
@@ -67,13 +80,13 @@ def streamLines(line):
     list_stream[-1] = last
     return list_stream
 
-def addToCsv(data_array):
+def addToCsv(data_array, note):
     file = open(__dirName+'daily_errors.csv', 'a', encoding='utf8') 
     for record in data_array:
         stringify = ""
         for data in record:
             stringify=stringify+","+data    
-        stringify=stringify+'\n'
+        stringify=stringify+","+note+"\n"
         file.write(stringify)
     file.close()
     
