@@ -6,20 +6,27 @@ static_count=1
 def findMissing(stream_data, main_data):
     stream_data_stripped= stripId(stream_data)
     main_data_stripped = stripId(main_data)
-    # main_max = len(main_data_stripped)-1
     main_idx=0
-    while len(stream_data_stripped)>0:
+    while len(stream_data_stripped)>500:
         batch = stream_data_stripped[:1][0]
         main_batch = main_data_stripped[main_idx]
-        # print(batch)
         if str(batch) == str(main_batch):
-            continue
+            exit
         else:
             print("ERROR at "+str(main_idx))
-            print("STREAM SHOWS: \n"+str(batch))
-            print("MAIN SHOWS: \n"+ str(main_batch))
-            print("\n")
-            # print("MAIN OPTIONS: \n"+str(main_data_stripped[main_idx+1])+"\n"+str(main_data_stripped[main_idx+2])+"\n\n")
+            flagged_idx=[]
+            for idx, data in enumerate(batch):
+                if data==main_batch[idx]:
+                    flagged_idx.append(0)
+                else:
+                    flagged_idx.append(1)
+            if sum(flagged_idx)>1:
+                print('SUM: '+ str(sum(flagged_idx)))
+                print("STREAM SHOWS: \n"+str(batch))
+                print("MAIN SHOWS: \n"+ str(main_batch))
+                print("MAIN OPTIONS: \n"+str(main_data_stripped[main_idx+1])+"\n"+str(main_data_stripped[main_idx+2])+"\n\n")
+            else:
+                exit
         if main_idx==len(main_data_stripped)-1:
             print("STOPPED MAIN")
             exit
