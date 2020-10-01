@@ -3,15 +3,12 @@ __dirName = 'C:/Users/evwhi/PythonCamp/fdm-ex-3/'
 
 def findJulianErrors(stream_data, main_data):
     deminishing_stream= stream_data
-    while len(deminishing_stream)>0:
-        batch = deminishing_stream[:10]        
-        for record in batch:
-            julian_main = float(record[3])
-            for data in main_data:
-                julian_stream = float(data[3])
-                if julian_main != deminishing_stream:
-                    print("MAIN: "+record[3])
-                    print("STREAM: "+data[3])
+    while len(deminishing_stream)>990:
+        batch = deminishing_stream[:10]    
+        # for record in batch:
+        #     record_id = int(record[0])
+        #     julian_stream = float(record[3])
+            # matching = main_data(filter(None, batch))
         deminishing_stream=deminishing_stream[10:]
 
 def findMissing(stream_data, main_data):
